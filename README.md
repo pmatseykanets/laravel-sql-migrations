@@ -6,7 +6,6 @@ Write your laravel migrations in plain SQL.
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Security](#security)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [Credits](#credits)
@@ -77,11 +76,7 @@ DROP TABLE IF EXISTS users;
 
 ### Run SQL migrations
 
-Proceed as usual using `migrate`, `migrate:rollback` and other commands.
-
-## Security
-
-If you discover any security related issues, please email pmatseykanets@gmail.com instead of using the issue tracker.
+Proceed as usual using `migrate`, `migrate:rollback` and other built-in commands.
 
 ## Changelog
 
