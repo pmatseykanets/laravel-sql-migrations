@@ -139,7 +139,21 @@ database
     └── 2018_06_15_000000_create_users_table.up.sql
 ```
 
-At this point you can forget about `2018_06_15_000000_create_users_table.php` unless you want to override `up` and / or `down` methods for this particular migration.
+*I know, it bloats `migrations` directory with additional files but this approach allows you to mix and match traditional and plain SQL migrations easily. If it's any consolation if you don't use reverse (`down`) migrations you can just delete `*.down.sql` file(s).*
+
+At this point you can forget about `2018_06_15_000000_create_users_table.php` unless you want to configure or override behavior of this particular migration.
+
+`SqlMigration` extends the built-in `Migration` so you can fine tune your migration in the same way
+
+```php
+class CreateNextIdFunction extends SqlMigration
+{
+    // Use a non default connection
+    public $connection = 'pgsql2';
+    // Wrap migration in a transaction if the database suports transactional DDL
+    public $withinTransaction = true;
+}
+```
 
 Now go ahead open up `*.sql` files and write your migration code.
 
