@@ -22,7 +22,7 @@ STUB;
 
     public function __construct(MigrationCreator $creator, Composer $composer)
     {
-        $this->signature .= '{--sql : Create plain SQL migration files}';
+        $this->signature .= '{--sql : Create a plain SQL migration}';
 
         parent::__construct($creator, $composer);
     }
