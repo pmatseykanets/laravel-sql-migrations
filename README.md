@@ -18,7 +18,7 @@ Write your laravel migrations in plain SQL.
 You can install the package via composer:
 
 ```bash
-$ composer require pmatseykanets/laravel-sql-migrations
+composer require pmatseykanets/laravel-sql-migrations
 ```
 
 If you're using Laravel < 5.5 or if you have package auto-discovery turned off you have to manually register the service provider:
@@ -35,7 +35,8 @@ If you're using Laravel < 5.5 or if you have package auto-discovery turned off y
 
 ### Make SQL migrations
 
-To create a base migration and `up` and `down` sql files with it
+To create a base migration and `up` and `down` sql files with it use `--sql` option
+
 ```bash
 php artisan make:migration create_users_table --sql
 ```
