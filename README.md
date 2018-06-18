@@ -16,12 +16,12 @@ Write your laravel migrations in plain SQL.
 
 ## Why
 
-Don't get me wrong, the Laravel's `SchemaBuilder` is absolutely great and you can get a lot of millage out of it.
+Don't get me wrong, the Laravel's [`SchemaBuilder`](https://laravel.com/docs/master/migrations) is absolutely great and you can get a lot of millage out of it.
 
 But there are cases when it's just standing in the way. Below are just a few examples where `SchemaBuilder` falls short.
 
 ### Using additional/richer data types
-I.e. if you're using PostgreSQL and you want to use a case insensitive data type for string/text data you may consider `CITEX`. This means that we have to resort to a hack like this
+I.e. if you're using [PostgreSQL](https://www.postgresql.org/) and you want to use a case insensitive data type for string/text data you may consider `CITEX`. This means that we have to resort to a hack like this
 
 ```php
 class CreateUsersTable extends Migration
@@ -47,13 +47,13 @@ CREATE TABLE IF NOT EXISTS users (
     ...
 );
 ```
-Of course there are plenty of other data types (i.e. range or FTS types in PostgreSQL) that might be very useful but `SchemaBuilder` is unaware of and never will be. 
+Of course there are plenty of other data types (i.e. [Range](https://www.postgresql.org/docs/current/static/rangetypes.html) or [Text Search](https://www.postgresql.org/docs/current/static/datatype-textsearch.html) data types in PostgreSQL) that might be very useful but `SchemaBuilder` is unaware of and never will be. 
 
 ### Managing stored functions, procedures and triggers
 
 This is a big one, especially if you're still using reverse (`down()`) migrations. This means that you need to cram both new and old source code of a function/procedure/trigger in `up()` and `down()` methods of your migration file and keep them in string variables which doesn't help with readability/maintainability.
 
-Even with `heredoc`/`nowdoc` syntax it's still gross.
+Even with [`heredoc`/`nowdoc`](https://secure.php.net/manual/en/language.types.string.php) syntax in `php` it's still gross.
 
 ### Taking advantage of `IF [NOT] EXISTS` and alike
 There is a multitude of important and useful SQL standard compliant and vendor specific clauses in DDL statements that can make your life so much easier. One of the well known and frequently used ones is `IF [NOT] EXISTS`.
@@ -100,6 +100,30 @@ CREATE INDEX IF NOT EXISTS some_table_nullable_column_idx
     ON some_table (nullable_column) 
     WHERE nullable_column IS NOT NULL;
 ```
+
+### Take advantage of database native procedural code (i.e. PL/pgSQL)
+
+When using PostgreSQL you can use an anonymous [PL/pgSQL](https://www.postgresql.org/docs/current/static/plpgsql.html) code block if you need to. I.e. dynamically (without knowing the database name ahead of time) set `search_path` if you want to install all extensions in a dedicated schema instead of polluting `public`. 
+
+The `.up.sql` migration could look like:
+
+```sql
+DO $$
+BEGIN
+  EXECUTE 'ALTER DATABASE ' || current_database() || ' SET search_path TO "$user",public,extensions';
+END;
+$$;
+``` 
+
+and the reverse `.down.sql`:
+
+```sql
+DO $$
+BEGIN
+  EXECUTE 'ALTER DATABASE ' || current_database() || ' SET search_path TO "$user",public';
+END;
+$$;
+``` 
 
 ## Installation
 
