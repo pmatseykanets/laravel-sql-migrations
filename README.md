@@ -6,12 +6,100 @@ Write your laravel migrations in plain SQL.
 
 ## Contents
 
+- [Why](#why)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [Credits](#credits)
 - [License](#license)
+
+## Why
+
+Don't get me wrong, the Laravel's `SchemaBuilder` is absolutely great and you can get a lot of millage out of it.
+
+But there are cases when it's just standing in the way. Below are just a few examples where `SchemaBuilder` falls short.
+
+### Using additional/richer data types
+I.e. if you're using PostgreSQL and you want to use a case insensitive data type for string/text data you may consider `CITEX`. This means that we have to resort to a hack like this
+
+```php
+class CreateUsersTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->bigIncrement('id');
+            $table->string('email')->unique();
+            // ...
+        });
+        
+        DB::unprepared('ALTER TABLE users ALTER COLUMN email TYPE CITEXT');
+    }
+}
+```
+instead of just
+
+```sql
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    email CITEXT UNIQUE,
+    ...
+);
+```
+Of course there are plenty of other data types (i.e. range or FTS types in PostgreSQL) that might be very useful but `SchemaBuilder` is unaware of and never will be. 
+
+### Managing stored functions, procedures and triggers
+
+This is a big one, especially if you're still using reverse (`down()`) migrations. This means that you need to cram both new and old source code of a function/procedure/trigger in `up()` and `down()` methods of your migration file and keep them in string variables which doesn't help with readability/maintainability.
+
+Even with `heredoc`/`nowdoc` syntax it's still gross.
+
+### Taking advantage of `IF [NOT] EXISTS` and alike
+There is a multitude of important and useful SQL standard compliant and vendor specific clauses in DDL statements that can make your life so much easier. One of the well known and frequently used ones is `IF [NOT] EXISTS`.
+  
+Instead of letting `ShemaBuilder` doing a separate query(ies) to `information_schema`
+ 
+```php
+if (! Schema::hasTable('users')) {
+    // create the table
+}
+
+if (! Schema::hasColumn('users', 'notes')) {
+    // create the column
+}
+```
+
+you can just write it natively in one statement
+
+```sql
+CREATE TABLE IF NOT EXISTS users (id BIGSERIAL PRIMARY KEY, ...);
+ALTER TABLE users ADD IF NOT EXISTS notes TEXT;
+```
+
+### Creating Indexes
+Some databases (i.e. PostgreSQL) allow you to (re)create indexes concurrently without locking your table.
+
+```sql
+CREATE INDEX CONCURRENTLY IF NOT EXISTS some_big_table_important_column_id 
+    ON some_big_table (important_column);
+    
+CREATE INDEX IF NOT EXISTS table_json_column_idx USING GIN ON table (json_column);
+``` 
+
+You may need to create a specific type of index instead of a default `btree`
+
+```sql
+CREATE INDEX IF NOT EXISTS some_table_json_column_idx ON some_table (json_column) USING GIN;
+``` 
+
+Or create a partial/functional index
+
+```sql
+CREATE INDEX IF NOT EXISTS some_table_nullable_column_idx 
+    ON some_table (nullable_column) 
+    WHERE nullable_column IS NOT NULL;
+```
 
 ## Installation
 
