@@ -7,8 +7,6 @@ use SqlMigrations\Console\MigrateMakeCommand;
 
 class SqlMigrationsServiceProvider extends ServiceProvider
 {
-    public $defer = true;
-
     /**
      * Register the service provider.
      *
