@@ -7,6 +7,8 @@ use SqlMigrations\Console\MigrateMakeCommand;
 
 class SqlMigrationsServiceProvider extends ServiceProvider
 {
+    public $defer = true;
+
     /**
      * Register the service provider.
      *
@@ -24,7 +26,7 @@ class SqlMigrationsServiceProvider extends ServiceProvider
      */
     protected function extendMigrateMakeCommand()
     {
-        $this->app->singleton('command.migrate.make', function ($app) {
+        $this->app->extend('command.migrate.make', function ($command, $app) {
             return new MigrateMakeCommand(
                 $app['migration.creator'],
                 $app['composer']
