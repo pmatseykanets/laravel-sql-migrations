@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS users (id BIGSERIAL PRIMARY KEY, ...);
 ALTER TABLE users ADD IF NOT EXISTS notes TEXT;
 ```
 
-### Creating Indexes
+### Using additional options when creating indexes
 Some databases (i.e. PostgreSQL) allow you to (re)create indexes concurrently without locking your table.
 
 ```sql
@@ -101,7 +101,7 @@ CREATE INDEX IF NOT EXISTS some_table_nullable_column_idx
     WHERE nullable_column IS NOT NULL;
 ```
 
-### Take advantage of database native procedural code (i.e. PL/pgSQL)
+### Taking advantage of database native procedural code (i.e. PL/pgSQL)
 
 When using PostgreSQL you can use an anonymous [PL/pgSQL](https://www.postgresql.org/docs/current/static/plpgsql.html) code block if you need to. I.e. dynamically (without knowing the database name ahead of time) set `search_path` if you want to install all extensions in a dedicated schema instead of polluting `public`. 
 
