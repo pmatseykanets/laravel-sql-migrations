@@ -1,20 +1,31 @@
 language: php
 
-php:
-  - 7.1
-  - 7.2
-env:
-  matrix:
-    - COMPOSER_FLAGS="--prefer-lowest"
-    - COMPOSER_FLAGS=""
+stages:
+  - check-cs
+  - test
 
-before_script:
-  - travis_retry composer self-update
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
-  - wget -q http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer
-  - sudo chmod a+x php-cs-fixer
-  - sudo mv php-cs-fixer /usr/local/bin/php-cs-fixer
+jobs:
+  include:
+    - stage: check-cs
+      php: 7.2
+      before_script:
+        - wget -q http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer
+        - sudo chmod a+x php-cs-fixer
+        - sudo mv php-cs-fixer /usr/local/bin/php-cs-fixer
+      script: php-cs-fixer fix --verbose --dry-run --stop-on-violation --using-cache=no
 
-script:
-  - php-cs-fixer fix --verbose --dry-run --stop-on-violation --using-cache=no
-  - phpunit
+    - stage: test
+      php:
+        - 7.1
+        - 7.2
+      env:
+        - COMPOSER_FLAGS="--prefer-lowest"
+        - COMPOSER_FLAGS=""
+      before_script:
+        - travis_retry composer self-update
+        - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+      script: phpunit
+
+cache:
+  directories:
+  - $HOME/.composer/cache
