@@ -1,5 +1,14 @@
 language: php
 
+php:
+  - 7.1
+  - 7.2
+
+env:
+  matrix:
+    - COMPOSER_FLAGS="--prefer-lowest"
+    - COMPOSER_FLAGS=""
+
 stages:
   - check-cs
   - test
@@ -7,6 +16,7 @@ stages:
 jobs:
   include:
     - stage: check-cs
+      env: CHECK
       php: 7.2
       before_script:
         - wget -q http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer
@@ -15,12 +25,6 @@ jobs:
       script: php-cs-fixer fix --verbose --dry-run --stop-on-violation --using-cache=no
 
     - stage: test
-      php:
-        - 7.1
-        - 7.2
-      env:
-        - COMPOSER_FLAGS="--prefer-lowest"
-        - COMPOSER_FLAGS=""
       before_script:
         - travis_retry composer self-update
         - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
