@@ -18,7 +18,6 @@ script: phpunit
 jobs:
   include:
     - stage: check-cs
-      env: CHECK
       php: 7.2
       before_script:
         - wget -q http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer
