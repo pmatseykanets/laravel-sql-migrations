@@ -9,9 +9,11 @@ env:
     - COMPOSER_FLAGS="--prefer-lowest"
     - COMPOSER_FLAGS=""
 
-stages:
-  - check-cs
-  - test
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+
+script: phpunit
 
 jobs:
   include:
@@ -23,12 +25,6 @@ jobs:
         - sudo chmod a+x php-cs-fixer
         - sudo mv php-cs-fixer /usr/local/bin/php-cs-fixer
       script: php-cs-fixer fix --verbose --dry-run --stop-on-violation --using-cache=no
-
-    - stage: test
-      before_script:
-        - travis_retry composer self-update
-        - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
-      script: phpunit
 
 cache:
   directories:
