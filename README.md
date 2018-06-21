@@ -9,6 +9,9 @@ Write your laravel migrations in plain SQL.
 - [Why](#why)
 - [Installation](#installation)
 - [Usage](#usage)
+    - [Make SQL Migrations](#make-sql-migrations)
+    - [Run SQL Migrations](#run-sql-migrations)
+- [Example Projects](#example-projects)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [Credits](#credits)
@@ -20,7 +23,7 @@ Don't get me wrong, the Laravel's [`SchemaBuilder`](https://laravel.com/docs/mas
 
 But there are cases when it's just standing in the way. Below are just a few examples where `SchemaBuilder` falls short.
 
-### Using additional/richer data types
+### Using additional / richer data types
 I.e. if you're using [PostgreSQL](https://www.postgresql.org/) and you want to use a case insensitive data type for string/text data you may consider `CITEX`. This means that we have to resort to a hack like this
 
 ```php
@@ -53,7 +56,7 @@ Of course there are plenty of other data types (i.e. [Range](https://www.postgre
 
 This is a big one, especially if you're still using reverse (`down()`) migrations. This means that you need to cram both new and old source code of a function/procedure/trigger in `up()` and `down()` methods of your migration file and keep them in string variables which doesn't help with readability/maintainability.
 
-Even with [`heredoc`/`nowdoc`](https://secure.php.net/manual/en/language.types.string.php) syntax in `php` it's still gross.
+Even with [`heredoc` / `nowdoc`](https://secure.php.net/manual/en/language.types.string.php) syntax in `php` it's still gross.
 
 ### Taking advantage of `IF [NOT] EXISTS` and alike
 There is a multitude of important and useful SQL standard compliant and vendor specific clauses in DDL statements that can make your life so much easier. One of the well known and frequently used ones is `IF [NOT] EXISTS`.
@@ -147,7 +150,7 @@ If you're using Laravel < 5.5 or if you have package auto-discovery turned off y
 
 ### Make SQL migrations
 
-To create a base migration and `up` and `down` sql files with it use `--sql` option
+The most convenient way of creating SQL migrations is to use `artisan make:migration` with **`--sql`** option
 
 ```bash
 php artisan make:migration create_users_table --sql
@@ -164,6 +167,11 @@ database
 ```
 
 *I know, it bloats `migrations` directory with additional files but this approach allows you to mix and match traditional and plain SQL migrations easily. If it's any consolation if you don't use reverse (`down`) migrations you can just delete `*.down.sql` file(s).*
+
+**Note:** if you're creating files manually make sure that:
+
+1. The base `php` migration class extends `SqlMigration` class and doesn't contain `up()` and `down()` methods, unless you mean to override the default behavior. 
+2. The filename (without extension) of `.up.sql` and `.down.sql` files matches exactly (including the timestamp part) the filename of the base `php` migration.
 
 At this point you can forget about `2018_06_15_000000_create_users_table.php` unless you want to configure or override behavior of this particular migration.
 
@@ -206,6 +214,13 @@ DROP TABLE IF EXISTS users;
 ### Run SQL migrations
 
 Proceed as usual using `migrate`, `migrate:rollback` and other built-in commands.
+
+## Example Projects
+
+You can find bare Laravel 5.6 projects with default SQL migrations here: 
+ 
+- [PostgreSQL](https://github.com/pmatseykanets/laravel-sql-migrations-example-postgres)
+- [MySQL](https://github.com/pmatseykanets/laravel-sql-migrations-example-mysql)
 
 ## Changelog
 
