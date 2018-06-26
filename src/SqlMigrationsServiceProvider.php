@@ -4,6 +4,7 @@ namespace SqlMigrations;
 
 use Illuminate\Support\ServiceProvider;
 use SqlMigrations\Console\MigrateMakeCommand;
+use SqlMigrations\Console\ModelMakeCommand;
 
 class SqlMigrationsServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,12 @@ class SqlMigrationsServiceProvider extends ServiceProvider
             return new MigrateMakeCommand(
                 $app['migration.creator'],
                 $app['composer']
+            );
+        });
+
+        $this->app->extend('command.model.make', function ($command, $app) {
+            return new ModelMakeCommand(
+                $app['files']
             );
         });
     }
