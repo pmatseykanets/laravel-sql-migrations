@@ -211,6 +211,12 @@ and `2018_06_15_000000_create_users_table.down.sql`
 DROP TABLE IF EXISTS users;
 ```
 
+You can also pass `--sql` option to `make:model` artisan command to instruct it to create plain SQL migrations for your newly created model.
+
+```bash
+php artisan make:model Post --migration --sql
+```
+
 ### Run SQL migrations
 
 Proceed as usual using `migrate`, `migrate:rollback` and other built-in commands.
