@@ -9,8 +9,8 @@ Write your laravel migrations in plain SQL.
 - [Why](#why)
 - [Installation](#installation)
 - [Usage](#usage)
-    - [Make SQL Migrations](#make-sql-migrations)
-    - [Run SQL Migrations](#run-sql-migrations)
+  - [Make SQL Migrations](#make-sql-migrations)
+  - [Run SQL Migrations](#run-sql-migrations)
 - [Example Projects](#example-projects)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
@@ -24,6 +24,7 @@ Don't get me wrong, the Laravel's [`SchemaBuilder`](https://laravel.com/docs/mas
 But there are cases when it's just standing in the way. Below are just a few examples where `SchemaBuilder` falls short.
 
 ### Using additional / richer data types
+
 I.e. if you're using [PostgreSQL](https://www.postgresql.org/) and you want to use a case insensitive data type for string/text data you may consider `CITEX`. This means that we have to resort to a hack like this
 
 ```php
@@ -36,11 +37,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             // ...
         });
-        
+
         DB::unprepared('ALTER TABLE users ALTER COLUMN email TYPE CITEXT');
     }
 }
 ```
+
 instead of just
 
 ```sql
@@ -50,6 +52,7 @@ CREATE TABLE IF NOT EXISTS users (
     ...
 );
 ```
+
 Of course there are plenty of other data types (i.e. [Range](https://www.postgresql.org/docs/current/static/rangetypes.html) or [Text Search](https://www.postgresql.org/docs/current/static/datatype-textsearch.html) data types in PostgreSQL) that might be very useful but `SchemaBuilder` is unaware of and never will be. 
 
 ### Managing stored functions, procedures and triggers
@@ -59,10 +62,11 @@ This is a big one, especially if you're still using reverse (`down()`) migration
 Even with [`heredoc` / `nowdoc`](https://secure.php.net/manual/en/language.types.string.php) syntax in `php` it's still gross.
 
 ### Taking advantage of `IF [NOT] EXISTS` and alike
+
 There is a multitude of important and useful SQL standard compliant and vendor specific clauses in DDL statements that can make your life so much easier. One of the well known and frequently used ones is `IF [NOT] EXISTS`.
   
 Instead of letting `ShemaBuilder` doing a separate query(ies) to `information_schema`
- 
+
 ```php
 if (! Schema::hasTable('users')) {
     // create the table
@@ -81,20 +85,21 @@ ALTER TABLE users ADD IF NOT EXISTS notes TEXT;
 ```
 
 ### Using additional options when creating indexes
+
 Some databases (i.e. PostgreSQL) allow you to (re)create indexes concurrently without locking your table.
 
 ```sql
 CREATE INDEX CONCURRENTLY IF NOT EXISTS some_big_table_important_column_id 
     ON some_big_table (important_column);
-    
+
 CREATE INDEX IF NOT EXISTS table_json_column_idx USING GIN ON table (json_column);
-``` 
+```
 
 You may need to create a specific type of index instead of a default `btree`
 
 ```sql
 CREATE INDEX IF NOT EXISTS some_table_json_column_idx ON some_table (json_column) USING GIN;
-``` 
+```
 
 Or create a partial/functional index
 
@@ -116,7 +121,7 @@ BEGIN
   EXECUTE 'ALTER DATABASE ' || current_database() || ' SET search_path TO "$user",public,extensions';
 END;
 $$;
-``` 
+```
 
 and the reverse `.down.sql`:
 
@@ -126,7 +131,7 @@ BEGIN
   EXECUTE 'ALTER DATABASE ' || current_database() || ' SET search_path TO "$user",public';
 END;
 $$;
-``` 
+```
 
 ## Installation
 
@@ -223,8 +228,8 @@ Proceed as usual using `migrate`, `migrate:rollback` and other built-in commands
 
 ## Example Projects
 
-You can find bare Laravel 5.6 projects with default SQL migrations here: 
- 
+You can find bare Laravel 5.6 projects with default SQL migrations here:
+
 - [PostgreSQL](https://github.com/pmatseykanets/laravel-sql-migrations-example-postgres)
 - [MySQL](https://github.com/pmatseykanets/laravel-sql-migrations-example-mysql)
 

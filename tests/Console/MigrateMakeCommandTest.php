@@ -2,18 +2,19 @@
 
 namespace Tests\Console;
 
-use Illuminate\Foundation\Application;
 use Mockery;
+use Tests\TestCase;
+use Illuminate\Support\Str;
+use Illuminate\Foundation\Application;
 use SqlMigrations\Console\MigrateMakeCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use Tests\TestCase;
 
 class MigrateMakeCommandTest extends TestCase
 {
     protected $basePath = 'tests/database/migrations/2018_06_16_000000_create_foo_table';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         array_map('unlink', glob($this->basePath.'.*'));
     }
@@ -40,7 +41,7 @@ class MigrateMakeCommandTest extends TestCase
         $this->runCommand($command, ['name' => 'create_foo_table', '--sql' => null]);
 
         $this->assertFileExists($phpMigrationPath);
-        $this->assertTrue(str_contains(file_get_contents($this->basePath.'.php'), 'class CreateFooTable extends SqlMigration'));
+        $this->assertTrue(Str::contains(file_get_contents($this->basePath.'.php'), 'class CreateFooTable extends SqlMigration'));
         $this->assertFileExists($this->basePath.'.up.sql');
         $this->assertEquals(file_get_contents($this->basePath.'.up.sql'), "-- Run the migrations\n");
         $this->assertFileExists($this->basePath.'.down.sql');
