@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0](https://github.com/pmatseykanets/laravel-sql-migrations/releases/tag/v0.4.0) 2019-10-25
+
+### Changed
+
+- Added Laravel 6 support
+
 ## [0.3.0](https://github.com/pmatseykanets/laravel-sql-migrations/releases/tag/v0.3.0) 2018-10-29
 
 ### Changed
