@@ -9,15 +9,6 @@ use Illuminate\Support\Str;
 abstract class SqlMigration extends Migration
 {
     /**
-     * @var array
-     */
-    private static $keywords = [
-        'ALTER', 'CREATE', 'DELETE', 'DROP', 'INSERT',
-        'REPLACE', 'SELECT', 'SET', 'TRUNCATE', 'UPDATE', 'USE',
-        'DELIMITER', 'END', 'DECLARE'
-    ];
-
-    /**
      * Run the migrations.
      *
      * @return void
@@ -57,28 +48,11 @@ abstract class SqlMigration extends Migration
                 if (!$query) {
                     continue;
                 }
-                $delimiter = is_int(strpos($query, "DELIMITER"));
-                if($delimiter || $delNum){
-                    if($delimiter && !$delNum ){
-                        $sql = '';
-                        $sql =  "$query; ";
-                        $delNum = true;
-                    }else if($delimiter && $delNum){
-                        $sql .=  "$query ";
-                        $delNum = false;
-                        $connection->unprepared($sql);
-                        $sql = '';
-                    }else{
-                        $sql .= "$query; ";
-                    }
-                }else{
-                    $delimiter = is_int(strpos($query, ";"));
-                    if($delimiter){
-                        $connection->unprepared("$sql $query");
-                        $sql = '';
-                    } else {
-                        $sql .= " $query";
-                    }
+                if(is_int(strpos($query, ';'))){
+                    $connection->unprepared("$sql $query");
+                    $sql = '';
+                } else {
+                    $sql .= " $query";
                 }
             }
         }
