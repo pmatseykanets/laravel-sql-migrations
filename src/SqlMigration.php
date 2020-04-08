@@ -14,7 +14,7 @@ abstract class SqlMigration extends Migration
     private static $keywords = [
         'ALTER', 'CREATE', 'DELETE', 'DROP', 'INSERT',
         'REPLACE', 'SELECT', 'SET', 'TRUNCATE', 'UPDATE', 'USE',
-        'DELIMITER', 'END'
+        'DELIMITER', 'END', 'DECLARE'
     ];
 
     /**
