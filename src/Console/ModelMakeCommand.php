@@ -4,9 +4,9 @@ namespace SqlMigrations\Console;
 
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Foundation\Console\ModelMakeCommand as BaseCommand;
+use Illuminate\Console\Command;
 
-class ModelMakeCommand extends BaseCommand
+class ModelMakeCommand extends Command
 {
     /**
      * Create a migration file for the model.

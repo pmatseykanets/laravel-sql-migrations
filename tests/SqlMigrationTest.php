@@ -4,11 +4,10 @@ namespace Tests;
 
 use CreateUsersTable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SqlMigrationTest extends TestCase
 {
-    protected $basePath = 'tests/database/migrations/2018_06_15_000000_create_users_table';
-
     public function testUp()
     {
         $migration = new CreateUsersTable();
@@ -16,8 +15,20 @@ class SqlMigrationTest extends TestCase
         DB::shouldReceive('connection')
             ->andReturnSelf()
             ->shouldReceive('unprepared')
-            ->with(file_get_contents($this->basePath.'.up.sql'));
-
+            ->withArgs(function($sql) {
+                return Str::contains($sql, [
+                    'CREATE',
+                    'users',
+                    'id',
+                    'name',
+                    'email',
+                    'password',
+                    'remember_token',
+                    'created_at',
+                    'updated_at',
+                    'users_email_idx'
+                ]);
+            });
         $migration->up();
     }
 
@@ -28,7 +39,12 @@ class SqlMigrationTest extends TestCase
         DB::shouldReceive('connection')
             ->andReturnSelf()
             ->shouldReceive('unprepared')
-            ->with(file_get_contents($this->basePath.'.down.sql'));
+            ->withArgs(function($sql) {
+                return Str::contains($sql, [
+                    'DROP',
+                    'users'
+                ]);
+            });
 
         $migration->down();
     }

@@ -2,10 +2,10 @@
 
 namespace Tests\Console;
 
+use Illuminate\Container\Container;
 use Mockery;
 use Tests\TestCase;
 use Illuminate\Support\Str;
-use Illuminate\Foundation\Application;
 use SqlMigrations\Console\MigrateMakeCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -25,10 +25,13 @@ class MigrateMakeCommandTest extends TestCase
             $creator = Mockery::mock('Illuminate\Database\Migrations\MigrationCreator'),
             $composer = Mockery::mock('Illuminate\Support\Composer')
         );
-
-        $app = new Application();
-        $app->useDatabasePath('tests/database');
-        $command->setLaravel($app);
+        $container = new Class extends Container {
+            public function databasePath()
+            {
+                return 'tests/database';
+            }
+        };
+        $command->setLaravel($container);
 
         $phpMigrationPath = $this->basePath.'.php';
         file_put_contents($phpMigrationPath, "<?php\n");
