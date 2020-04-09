@@ -15,7 +15,7 @@ class SqlMigrationTest extends TestCase
         DB::shouldReceive('connection')
             ->andReturnSelf()
             ->shouldReceive('unprepared')
-            ->withArgs(function($sql) {
+            ->withArgs(function ($sql) {
                 return Str::contains($sql, [
                     'CREATE',
                     'users',
@@ -26,7 +26,7 @@ class SqlMigrationTest extends TestCase
                     'remember_token',
                     'created_at',
                     'updated_at',
-                    'users_email_idx'
+                    'users_email_idx',
                 ]);
             });
         $migration->up();
@@ -39,10 +39,10 @@ class SqlMigrationTest extends TestCase
         DB::shouldReceive('connection')
             ->andReturnSelf()
             ->shouldReceive('unprepared')
-            ->withArgs(function($sql) {
+            ->withArgs(function ($sql) {
                 return Str::contains($sql, [
                     'DROP',
-                    'users'
+                    'users',
                 ]);
             });
 

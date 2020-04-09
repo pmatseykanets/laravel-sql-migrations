@@ -5,6 +5,10 @@ namespace SqlMigrations;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class SqlMigration.
+ * @package SqlMigrations
+ */
 abstract class SqlMigration extends Migration
 {
     /**
@@ -30,7 +34,6 @@ abstract class SqlMigration extends Migration
     /**
      * Apply the migration.
      *
-     * @param $path
      * @param mixed $direction
      */
     public function apply($direction)
@@ -40,13 +43,13 @@ abstract class SqlMigration extends Migration
             $file = file($path);
             $sql = '';
             $ignore = false;
-            foreach($file as $line){
+            foreach ($file as $line) {
                 $query = trim($line);
                 $query = $this->manipulateCommentBlock($query, $ignore);
-                if (!$query) {
+                if (! $query) {
                     continue;
                 }
-                if(is_int(strpos($query, ';'))){
+                if (is_int(strpos($query, ';'))) {
                     $connection->unprepared("$sql $query");
                     $sql = '';
                 } else {
@@ -57,8 +60,8 @@ abstract class SqlMigration extends Migration
     }
 
     /**
-     * @param $line
-     * @param $ignoreLine
+     * @param $query
+     * @param $ignore
      * @return string
      */
     private function manipulateCommentBlock($query, &$ignore)
@@ -84,6 +87,7 @@ abstract class SqlMigration extends Migration
             $ignore = true;
         }
         $query = trim($query);
+
         return $query;
     }
 

@@ -25,7 +25,7 @@ class MigrateMakeCommandTest extends TestCase
             $creator = Mockery::mock('Illuminate\Database\Migrations\MigrationCreator'),
             $composer = Mockery::mock('Illuminate\Support\Composer')
         );
-        $container = new Class extends Container {
+        $container = new class extends Container {
             public function databasePath()
             {
                 return 'tests/database';
