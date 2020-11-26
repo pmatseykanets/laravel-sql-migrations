@@ -8,7 +8,11 @@ on:
     paths-ignore:
       - '.gitignore'
       - '.gitattributes'
-      - '**/*.md'
+      - '.php_cs'
+      - 'CHANGELOG.md'
+      - 'CONTRIBUTING.md'
+      - 'LICENSE.md'
+      - 'README.md'
 
 jobs:
   tests:
