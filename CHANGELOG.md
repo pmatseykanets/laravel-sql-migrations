@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0](https://github.com/pmatseykanets/laravel-sql-migrations/releases/tag/v1.0.0) 2020-11-25
+
+### Changed
+
+- Added Laravel 7 and 8 support
+
 ## [0.4.0](https://github.com/pmatseykanets/laravel-sql-migrations/releases/tag/v0.4.0) 2019-10-25
 
 ### Changed
