@@ -6,9 +6,9 @@ on:
       - master
   pull_request:
     paths-ignore:
-      - '*.md'
       - '.gitignore'
       - '.gitattributes'
+      - '**/*.md'
 
 jobs:
   tests:
