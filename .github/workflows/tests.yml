@@ -28,11 +28,15 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip
           tools: composer:v2
-          coverage: none
+          coverage: xdebug
 
       - name: Install dependencies
         run: |
            composer require "laravel/framework=${{ matrix.laravel }}" --no-update
            composer update --prefer-dist --no-interaction --no-progress
       - name: Run tests
-        run: vendor/bin/phpunit --verbose
+        run: vendor/bin/phpunit --verbose --coverage-clover coverage.xml
+
+      - name: Upload code coverage
+        if: matrix.php == '7.4' && matrix.laravel == '^8.0'
+        uses: codecov/codecov-action@v1
