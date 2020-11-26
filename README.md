@@ -25,7 +25,7 @@ But there are cases when it's just standing in the way. Below are just a few exa
 
 ### Using additional / richer data types
 
-I.e. if you're using [PostgreSQL](https://www.postgresql.org/) and you want to use a case insensitive data type for string/text data you may consider `CITEX`. This means that we have to resort to a hack like this
+I.e. if you're using [PostgreSQL](https://www.postgresql.org/) and you want to use a case insensitive data type for string/text data you may consider `CITEXT`. This means that we have to resort to a hack like this
 
 ```php
 class CreateUsersTable extends Migration
