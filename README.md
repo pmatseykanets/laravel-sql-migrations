@@ -1,6 +1,6 @@
 # laravel-sql-migrations
 
-[![Build Status](https://travis-ci.com/pmatseykanets/laravel-sql-migrations.svg?branch=master)](https://travis-ci.com/pmatseykanets/laravel-sql-migrations)
+![tests](https://github.com/pmatseykanets/laravel-sql-migrations/workflows/tests/badge.svg)
 
 Write your laravel migrations in plain SQL.
 
