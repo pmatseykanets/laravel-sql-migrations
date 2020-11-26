@@ -5,6 +5,10 @@ on:
     branches:
       - master
   pull_request:
+    paths-ignore:
+      - '*.md'
+      - '.gitignore'
+      - '.gitattributes'
 
 jobs:
   tests:
