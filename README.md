@@ -2,7 +2,7 @@
 
 ![tests](https://github.com/pmatseykanets/laravel-sql-migrations/workflows/tests/badge.svg)
 
-Write your laravel migrations in plain SQL.
+Write your Laravel migrations in plain SQL.
 
 ## Contents
 
