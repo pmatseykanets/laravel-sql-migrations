@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0](https://github.com/pmatseykanets/laravel-sql-migrations/releases/tag/v1.2.0) 2022-05-06
+
+## Changed
+
+- Added Laravel 9 support
+
 ## [1.1.0](https://github.com/pmatseykanets/laravel-sql-migrations/releases/tag/v1.1.0) 2021-01-06
 
 ### Changed
