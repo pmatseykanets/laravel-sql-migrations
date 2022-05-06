@@ -25,14 +25,23 @@ class SqlMigrationsServiceProvider extends ServiceProvider
      */
     protected function extendMigrateMakeCommand()
     {
-        $this->app->extend('command.migrate.make', function ($command, $app) {
+        $migrateMakeAbstract = 'Illuminate\Database\Console\Migrations\MigrateMakeCommand';
+        $modelMakeAbstract = 'Illuminate\Foundation\Console\ModelMakeCommand';
+
+        $appMajor = explode('.', $this->app->version())[0];
+        if ($appMajor < 9) {
+            $migrateMakeAbstract = 'command.migrate.make';
+            $modelMakeAbstract = 'command.model.make';
+        }
+
+        $this->app->extend($migrateMakeAbstract, function ($command, $app) {
             return new MigrateMakeCommand(
                 $app['migration.creator'],
                 $app['composer']
             );
         });
 
-        $this->app->extend('command.model.make', function ($command, $app) {
+        $this->app->extend($modelMakeAbstract, function ($command, $app) {
             return new ModelMakeCommand(
                 $app['files']
             );
